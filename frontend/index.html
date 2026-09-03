@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        StockMind AI - Multi-Agent Stock Analysis
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                AI
+            </div>
+
+            <div>
+
+                <h2>
+                    StockMind
+                </h2>
+
+                <span>
+                    Multi-Agent Analyst
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <p class="section-title">
+                SYSTEM
+            </p>
+
+
+            <div
+                class="side-item active"
+                id="dashboardBtn"
+            >
+
+                <span>📊</span>
+
+                Dashboard
+
+            </div>
+
+
+            <div
+                class="side-item"
+                id="agentsBtn"
+            >
+
+                <span>🤖</span>
+
+                AI Agents
+
+            </div>
+
+
+            <div
+                class="side-item"
+                id="apiBtn"
+            >
+
+                <span>⚙️</span>
+
+                API Status
+
+            </div>
+
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="pulse"></span>
+
+            API Online
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================
+         MAIN
+    ====================================== -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    AUTONOMOUS ANALYSIS
+                </p>
+
+                <h1>
+                    AI Stock Intelligence
+                </h1>
+
+                <p class="subtitle">
+                    Multiple specialized AI agents analyzing one stock.
+                </p>
+
+            </div>
+
+
+            <div class="top-badge">
+                Gemini AI
+            </div>
+
+        </header>
+
+
+
+<!-- =================================
+     SEARCH
+================================== -->
+
+<section class="search-panel">
+
+    <div class="search-label">
+
+        <span>
+            🔎
+        </span>
+
+        <div>
+
+            <strong>
+                Analyze a stock
+            </strong>
+
+            <small>
+                Enter an NSE stock symbol
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="search-area">
+
+        <input
+            type="text"
+            id="symbol"
+            autocomplete="off"
+        >
+
+        <button
+            id="analyzeBtn"
+            onclick="analyzeStock()"
+        >
+            <span>Analyze</span>
+            <span>→</span>
+        </button>
+
+    </div>
+
+
+    <div class="quick-stocks">
+
+        <span>
+            Recent:
+        </span>
+
+        <div id="recent-searches">
+
+            <span class="no-recent">
+                No recent searches
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+            <!-- RECENT SEARCHES -->
+
+            <div class="quick-stocks">
+
+                <span>
+                    Recent:
+                </span>
+
+
+                <div
+                    id="recent-searches"
+                >
+
+                    <span class="no-recent">
+                        No recent searches
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             LOADING
+        ================================== -->
+
+        <section
+            id="loading"
+            class="loading"
+        >
+
+            <div class="loader"></div>
+
+            <div>
+
+                <strong>
+                    AI agents are working...
+                </strong>
+
+                <p id="loadingText">
+                    Starting analysis
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             ERROR
+        ================================== -->
+
+        <section
+            id="error"
+            class="error"
+        ></section>
+
+
+
+        <!-- =================================
+             RESULTS
+        ================================== -->
+
+        <section
+            id="results"
+            class="results"
+        >
+
+
+            <!-- STOCK HEADER -->
+
+            <div class="stock-header">
+
+
+                <div>
+
+                    <span class="live-tag">
+                        ● LIVE ANALYSIS
+                    </span>
+
+                    <h2 id="stock-name">
+                        —
+                    </h2>
+
+                    <p id="market-symbol">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="orchestrator">
+
+                    <span class="pulse"></span>
+
+                    <div>
+
+                        <small>
+                            ORCHESTRATOR
+                        </small>
+
+                        <strong>
+                            ACTIVE
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 LIVE METRICS
+            ================================== -->
+
+            <div class="metrics-grid">
+
+
+                <div class="metric-card">
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong id="current-price">
+                        ₹—
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        Open
+                    </span>
+
+                    <strong id="open-price">
+                        ₹—
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        Day High
+                    </span>
+
+                    <strong id="high-price">
+                        ₹—
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        Day Low
+                    </span>
+
+                    <strong id="low-price">
+                        ₹—
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        Volume
+                    </span>
+
+                    <strong id="volume">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 AGENT FLOW
+            ================================== -->
+
+            <div class="flow">
+
+
+                <div class="flow-agent">
+
+                    <span>
+                        📊
+                    </span>
+
+                    <small>
+                        Fundamental
+                    </small>
+
+                </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-agent">
+
+                    <span>
+                        📈
+                    </span>
+
+                    <small>
+                        Technical
+                    </small>
+
+                </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-agent">
+
+                    <span>
+                        📰
+                    </span>
+
+                    <small>
+                        Sentiment
+                    </small>
+
+                </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-agent">
+
+                    <span>
+                        ⚠️
+                    </span>
+
+                    <small>
+                        Risk
+                    </small>
+
+                </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-agent decision-flow">
+
+                    <span>
+                        🧠
+                    </span>
+
+                    <small>
+                        Decision
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 AGENT CARDS
+            ================================== -->
+
+            <div class="agent-grid">
+
+
+                <!-- FUNDAMENTAL -->
+
+                <div
+                    class="agent-card"
+                    onclick="toggleCard(this)"
+                >
+
+                    <div class="card-top">
+
+                        <div class="agent-icon fundamental">
+                            📊
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Fundamental
+                            </h3>
+
+                            <small>
+                                Financial health
+                            </small>
+
+                        </div>
+
+
+                        <span class="arrow">
+                            ⌄
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="fundamental-view"
+                        class="status"
+                    >
+                        —
+                    </div>
+
+
+                    <div class="card-details">
+
+                        <p id="fundamental-reason">
+                            Waiting for analysis...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TECHNICAL -->
+
+                <div
+                    class="agent-card"
+                    onclick="toggleCard(this)"
+                >
+
+                    <div class="card-top">
+
+                        <div class="agent-icon technical">
+                            📈
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Technical
+                            </h3>
+
+                            <small>
+                                Price & momentum
+                            </small>
+
+                        </div>
+
+
+                        <span class="arrow">
+                            ⌄
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="technical-view"
+                        class="status"
+                    >
+                        —
+                    </div>
+
+
+                    <div class="card-details">
+
+                        <p id="technical-reason">
+                            Waiting for analysis...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SENTIMENT -->
+
+                <div
+                    class="agent-card"
+                    onclick="toggleCard(this)"
+                >
+
+                    <div class="card-top">
+
+                        <div class="agent-icon sentiment">
+                            📰
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Sentiment
+                            </h3>
+
+                            <small>
+                                Market news
+                            </small>
+
+                        </div>
+
+
+                        <span class="arrow">
+                            ⌄
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="news-view"
+                        class="status"
+                    >
+                        —
+                    </div>
+
+
+                    <div class="card-details">
+
+                        <p id="news-reason">
+                            Waiting for analysis...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RISK -->
+
+                <div
+                    class="agent-card"
+                    onclick="toggleCard(this)"
+                >
+
+                    <div class="card-top">
+
+                        <div class="agent-icon risk">
+                            ⚠️
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Risk
+                            </h3>
+
+                            <small>
+                                Risk assessment
+                            </small>
+
+                        </div>
+
+
+                        <span class="arrow">
+                            ⌄
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="risk-view"
+                        class="status"
+                    >
+                        —
+                    </div>
+
+
+                    <div class="card-details">
+
+                        <p id="risk-reason">
+                            Waiting for analysis...
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 FINAL AI DECISION
+            ================================== -->
+
+            <section class="decision-card">
+
+
+                <div class="decision-heading">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            SYNTHESIS
+                        </span>
+
+                        <h2>
+                            🧠 Final AI Decision
+                        </h2>
+
+                    </div>
+
+
+                    <span class="ai-chip">
+                        Gemini
+                    </span>
+
+                </div>
+
+
+
+                <!-- OVERALL VIEW -->
+
+                <div class="overall-view-box">
+
+                    <span>
+                        Overall View
+                    </span>
+
+                    <p id="overall-view">
+                        —
+                    </p>
+
+                </div>
+
+
+
+                <!-- DECISION GRID -->
+
+                <div class="decision-grid">
+
+
+                    <div class="decision-box">
+
+                        <span>
+                            Recommendation
+                        </span>
+
+                        <strong id="recommendation">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="decision-box">
+
+                        <span>
+                            Confidence
+                        </span>
+
+                        <strong id="confidence">
+                            —
+                        </strong>
+
+
+                        <div class="confidence-bar">
+
+                            <div
+                                id="confidence-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI REASONING -->
+
+                <div class="text-section">
+
+                    <h3>
+                        AI Reasoning
+                    </h3>
+
+                    <p id="reasoning">
+                        —
+                    </p>
+
+                </div>
+
+
+
+                <!-- RISKS -->
+
+                <div class="text-section risk-section">
+
+                    <h3>
+                        ⚠ Important Risks
+                    </h3>
+
+                    <p id="important-risks">
+                        —
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================
+                 NEWS
+            ================================== -->
+
+            <section class="news-panel">
+
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            MARKET INTELLIGENCE
+                        </span>
+
+                        <h2>
+                            📰 Recent Headlines
+                        </h2>
+
+                    </div>
+
+
+                    <span id="news-count">
+                        0 articles
+                    </span>
+
+                </div>
+
+
+                <div id="headlines">
+
+                    No headlines loaded.
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================
+                 RAW DATA
+            ================================== -->
+
+            <section class="data-panel">
+
+
+                <button
+                    class="data-toggle"
+                    onclick="toggleData()"
+                >
+
+                    <span>
+                        View Agent Data
+                    </span>
+
+                    <span id="data-arrow">
+                        ⌄
+                    </span>
+
+                </button>
+
+
+                <pre id="raw-data"></pre>
+
+            </section>
+
+        </section>
+
+
+
+        <!-- =================================
+             EMPTY STATE
+        ================================== -->
+
+        <section
+            id="empty"
+            class="empty"
+        >
+
+            <div class="empty-icon">
+                🤖
+            </div>
+
+
+            <h2>
+                Ready to analyze
+            </h2>
+
+
+            <p>
+                Enter a stock symbol above and let the
+                autonomous agents do the research.
+            </p>
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <span>
+                FastAPI
+            </span>
+
+            <span>•</span>
+
+            <span>
+                Yahoo Finance
+            </span>
+
+            <span>•</span>
+
+            <span>
+                Gemini AI
+            </span>
+
+            <span>•</span>
+
+            <span>
+                Multi-Agent Architecture
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="/static/script.js"></script>
+
+</body>
+
+</html>
